@@ -1,54 +1,52 @@
-import React from 'react'
 const Navbar = () => {
   const navItems = (
     <>
-    <li>
-      <a href="Home">Home</a>
-    </li>
-    <li tabIndex={0}>
-      <details>
-        <summary>Catagory</summary>
-        <ul>
-          <li>
-            <a href="All">All</a>
-          </li>
-          <li>
-            <a href="Clothing">Clothing</a>
-          </li>
-          <li>
-            <a href="Accessories">Accessories</a>
-          </li>
-          <li>
-            <a href="Gadgets">Gadgets</a>
-          </li>
-          <li>
-            <a href="Swag">Swag</a>
-          </li>
-        </ul>
-      </details>
-    </li>
-    <li tabIndex={0}>
-      <details>
-        <summary>Service</summary>
-        <ul>
-          <li>
-            <a href="Order">Order</a>
-          </li>
-          <li>
-            <a href="Order Tracking">Order Tracking</a>
-          </li>
-        </ul>
-      </details>
-    </li>
-    <li>
-      <a href="/">Promotions</a>
-    </li>
-    <li>
-      <a href="/">About Us</a>
-    </li>
+      <li>
+        <a href="Home">Home</a>
+      </li>
+      <li tabIndex={0}>
+        <details>
+          <summary>Catagory</summary>
+          <ul>
+            <li>
+              <a href="/shop">All</a>
+            </li>
+            <li>
+              <a href="/shop?Clothing">Clothing</a>
+            </li>
+            <li>
+              <a href="/shop?Accessories">Accessories</a>
+            </li>
+            <li>
+              <a href="/shop?Gadgets">Gadgets</a>
+            </li>
+            <li>
+              <a href="/shop?Swag">Swag</a>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li tabIndex={0}>
+        <details>
+          <summary>Service</summary>
+          <ul>
+            <li>
+              <a href="Order">Order</a>
+            </li>
+            <li>
+              <a href="Order Tracking">Order Tracking</a>
+            </li>
+          </ul>
+        </details>
+      </li>
+      <li>
+        <a href="/">Promotions</a>
+      </li>
+      <li>
+        <a href="/">About Us</a>
+      </li>
     </>
-    
-  )
+  );
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -87,12 +85,9 @@ const Navbar = () => {
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navItems}
-        </ul>
+        <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
-      <div className="navbar-end">
-      </div>
+      <div className="navbar-end"></div>
       <div className="flex-none">
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
@@ -160,7 +155,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
