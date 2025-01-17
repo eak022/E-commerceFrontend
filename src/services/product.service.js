@@ -1,8 +1,9 @@
 import api from "./api";
-const API_URL = "";
+const API_URL = import.meta.env.VITE_BASE_URL + "/product";
 
 const getAllProducts = async () => {
-  return await api.get(`${API_URL}/product.json`); // Use template literals to properly concatenate the URL
+  return await api.get(API_URL);
+  console.log(getAllProducts);
 };
 
 const ProductService = {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProductService from "../../services/product.service";
 import Card from "../../components/Card";
+import { useSearchParams } from "react-router-dom";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -8,19 +9,35 @@ const ProductList = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [sortOption, setSortOption] = useState("default");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [searchParams, setSearchParams] = useSearchParams();
   const [itemPerPage, setItemPerPage] = useState(8);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const categoryQuery = searchParams.get("category") || "all";
+  const itemsPerPageQuery = searchParams.get("itemsPerPage") || 8;
+
+  useEffect(() => {
+    setSelectedCategory(categoryQuery);
+    setItemPerPage(parseInt(itemsPerPageQuery, 10));
+  }, [categoryQuery, itemsPerPageQuery]);
+
   useEffect(() => {
     const fetchData = async () => {
-      const response = await ProductService.getAllProducts();
-      setProducts(response.data);
-      setCategories([
-        "all",
-        ...new Set(response.data.map((item) => item.category)),
-      ]);
-      setFilteredItems(response.data); // Set all products initially
+      try {
+        const response = await ProductService.getAllProducts();
+        const productsData = response.data;
+
+        setProducts(productsData);
+        setCategories([
+          "all",
+          ...new Set(productsData.map((item) => item.category)),
+        ]);
+        setFilteredItems(productsData);
+      } catch (error) {
+        console.error("Failed to fetch products:", error.message);
+      }
     };
+
     fetchData();
   }, []);
 
@@ -31,9 +48,9 @@ const ProductList = () => {
         ? products
         : products.filter((item) => item.category === category);
 
-    // Apply the selected sort option to the filtered items
     handleSortChange(sortOption, filtered);
-    setCurrentPage(1); // Reset to the first page when a category is selected
+    setSearchParams({ category });
+    setCurrentPage(1);
   };
 
   const handleSortChange = (option, items) => {
@@ -72,7 +89,11 @@ const ProductList = () => {
         {categories.map((category, index) => (
           <button
             key={index}
-            className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300"
+            className={`px-4 py-2 rounded-full ${
+              selectedCategory === category
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
             onClick={() => filterItem(category)}
           >
             <p className="capitalize">{category}</p>
@@ -80,18 +101,18 @@ const ProductList = () => {
         ))}
       </div>
 
-      {/* Sort Options (Moved to the right side) */}
+      {/* Sort Options */}
       <div className="flex justify-end w-full md:w-1/5 mb-4">
         <div className="bg-black p-2">
           <select
             name="sortOption"
             id="sortOption"
             className="bg-black text-white px-2 rounded-sm"
-            value={sortOption} // Bind the selected sort option to state
+            value={sortOption}
             onChange={(e) => {
               const newSortOption = e.target.value;
-              setSortOption(newSortOption); // Update the sort option state
-              handleSortChange(newSortOption, filteredItems); // Apply sorting to the filtered items
+              setSortOption(newSortOption);
+              handleSortChange(newSortOption, filteredItems);
             }}
           >
             <option value="default">Default</option>
