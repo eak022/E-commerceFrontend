@@ -1,4 +1,4 @@
-export function UserCircleSolid(props) {
+export default function UserCircleSolid(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

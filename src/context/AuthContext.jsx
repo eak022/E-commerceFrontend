@@ -12,7 +12,11 @@ import {
   FacebookAuthProvider,
   updateProfile,
 } from "firebase/auth";
-// สร้าง Context
+import { Cookies } from "react-cookie";
+import UserService from "../services/user.service";
+
+const cookies = new Cookies();
+
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -21,6 +25,10 @@ const AuthProvider = ({ children }) => {
   const auth = getAuth(app);
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
+  };
+  const getUser = () => {
+    const userInfo = cookies.get("user") || null;
+    return userInfo;
   };
   const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
@@ -63,6 +71,7 @@ const AuthProvider = ({ children }) => {
     createUser,
     login,
     logout,
+    getUser,
     signUpWithGoogle,
     signUpWithGithub,
     signUpWithFacebook,
@@ -71,11 +80,19 @@ const AuthProvider = ({ children }) => {
   };
   //check if user is logged in
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
         setUser(currentUser);
         setIsLoading(false);
+        const { email } = currentUser;
+        const response = await UserService.signJwt(email);
+
+        if (response.data) {
+          cookies.set("user", response.data);
+        }
+      } else {
+        cookies.remove("user");
       }
       setIsLoading(false);
     });

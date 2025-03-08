@@ -8,6 +8,7 @@ const UpdateProfile = () => {
   const [displayName, setDisplayName] = useState(user?.displayName || "");
   const [photoURL, setPhotoURL] = useState(user?.photoURL || "");
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     updateUserProfile(displayName, photoURL)
@@ -29,6 +30,7 @@ const UpdateProfile = () => {
         });
       });
   };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div className="card w-96 bg-white shadow-lg">

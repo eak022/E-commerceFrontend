@@ -1,18 +1,18 @@
 import { createBrowserRouter } from "react-router";
 import MainLayout from "../layouts/Main";
-import DashBoardLayout from "../layouts/DashbordLayout";
-import Dashboard from "../Dashboard/index"
+import DashboardLayout from "../layouts/DashbordLayout";
+import Dashboard from "../Dashboard/index";
 import Home from "../pages/Home/Index";
 import Shop from "../pages/Shop/Index";
 import Cart from "../pages/Cart/Index";
 import SignUp from "../components/SignUp";
 import SignIn from "../components/SignIn";
 import UpdateProfile from "../components/UpdateProfile";
-import UserProfile from "../components/UserProfile";
+import ProfileUser from "../components/UserProfile";
 import ProtectPage from "../pages/ProtectPage/index";
 import AddProduct from "../pages/AddProduct/index";
 import ManageItems from "../pages/ManageItems/index";
-
+import AdminRoute from "../ProtectRoutes/AdminRoute";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -35,12 +35,12 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/signup",
-        element: <SignUp />,
+        path: "/signin",
+        element: <SignIn />,
       },
       {
-        path: "/singin",
-        element: <SignIn />,
+        path: "/signup",
+        element: <SignUp />,
       },
       {
         path: "/updateProfile",
@@ -51,36 +51,36 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/userprofile",
+        path: "/profileUser",
         element: (
           <ProtectPage>
-            <UserProfile />
+            <ProfileUser />
           </ProtectPage>
         ),
       },
     ],
   },
   {
-    path: "/dashboard",
+    path: "dashboard",
     element: (
-      <ProtectPage>
-        <DashBoardLayout />
-      </ProtectPage>
+      <AdminRoute>
+        <DashboardLayout />
+      </AdminRoute>
     ),
     children: [
       {
         path: "",
-        element: <Dashboard />
+        element: <Dashboard />,
       },
       {
-        path: "addProduct",
-        element: <AddProduct />
+        path: "add-Product",
+        element: <AddProduct />,
       },
       {
         path: "manage-items",
-        element: <ManageItems />
-      }
-    ]
-  }
+        element: <ManageItems />,
+      },
+    ],
+  },
 ]);
 export default router;

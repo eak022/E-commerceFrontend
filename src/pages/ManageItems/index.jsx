@@ -6,8 +6,8 @@ const index = () => {
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
 
-  // โหลดข้อมูลสินค้าจาก API
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -23,7 +23,6 @@ const index = () => {
     setLoading(false);
   };
 
-  // ลบสินค้า
   const handleDelete = async (id) => {
     const result = await Swal.fire({
       title: "Are you sure?",
@@ -46,26 +45,30 @@ const index = () => {
     }
   };
 
-  // เปิด Modal สำหรับแก้ไขสินค้า
   const handleEdit = (product) => {
-    setEditProduct(product);
+    setEditProduct({
+      ...product,
+      existingImage: product.image,
+    });
+    setSelectedFile(null);
   };
 
-  
-
-  // อัปโหลดรูปภาพและแสดง preview
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setEditProduct({ ...editProduct, image: file, imagePreview: reader.result });
-    };
+    setSelectedFile(file);
+
     if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setEditProduct((prevProduct) => ({
+          ...prevProduct,
+          imagePreview: reader.result,
+        }));
+      };
       reader.readAsDataURL(file);
     }
   };
 
-    // อัปเดตสินค้า
   const handleUpdate = async () => {
     const formData = new FormData();
     formData.append("name", editProduct.name);
@@ -74,13 +77,18 @@ const index = () => {
     formData.append("category", editProduct.category);
 
     if (selectedFile) {
-      formData.append("file", selectedFile); 
+      formData.append("file", selectedFile);
+    } else {
+      formData.append("existingImage", editProduct.existingImage);
     }
 
     try {
       await ProductService.updateProduct(editProduct._id, formData);
       setEditProduct(null);
+
+      // Reload products
       fetchProducts();
+
       Swal.fire("Updated!", "Product updated successfully.", "success");
     } catch (error) {
       Swal.fire("Error!", "Failed to update the product.", "error");
@@ -91,7 +99,6 @@ const index = () => {
     <div className="container mx-auto p-6">
       <h2 className="text-3xl font-bold text-center mb-6">Manage Products</h2>
 
-      {/* ตารางแสดงสินค้า */}
       {loading ? (
         <p className="text-center">Loading...</p>
       ) : (
@@ -127,7 +134,10 @@ const index = () => {
                     <td className="p-3 border">{product.name}</td>
                     <td className="p-3 border">{product.category}</td>
                     <td className="p-3 border">{product.description}</td>
-                    <td className="p-3 border">{product.price} THB</td>
+                    <td className="p-3 border whitespace-nowrap">
+                      {product.price} THB
+                    </td>
+
                     <td className="p-3 border">
                       <div className="flex justify-center space-x-2">
                         <button
@@ -152,7 +162,6 @@ const index = () => {
         </div>
       )}
 
-      {/* Modal สำหรับแก้ไขสินค้า */}
       {editProduct && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -207,13 +216,11 @@ const index = () => {
               className="w-full border p-2 rounded mb-3"
               onChange={handleImageUpload}
             />
-            {editProduct.imagePreview && (
-              <img
-                src={editProduct.imagePreview}
-                alt="Product Preview"
-                className="w-32 h-32 object-cover mx-auto rounded-md mb-3"
-              />
-            )}
+            <img
+              src={editProduct.imagePreview || editProduct.existingImage}
+              alt="Product Preview"
+              className="w-32 h-32 object-cover mx-auto rounded-md mb-3"
+            />
 
             <div className="flex justify-end space-x-2 mt-4">
               <button
@@ -222,7 +229,7 @@ const index = () => {
               >
                 Cancel
               </button>
-               <button
+              <button
                 className="bg-green-500 text-white px-4 py-2 rounded"
                 onClick={handleUpdate}
               >

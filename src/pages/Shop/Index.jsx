@@ -1,11 +1,12 @@
+import React from "react";
+import Productlist from "./ProductList";
 import Banner from "./Banner";
-import ProductList from "./ProductList";
 
 const Index = () => {
   return (
     <div>
       <Banner />
-      <ProductList />
+      <Productlist />
     </div>
   );
 };
