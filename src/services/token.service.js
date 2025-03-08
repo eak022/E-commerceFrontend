@@ -3,7 +3,7 @@ const cookies = new Cookies();
 
 const getLocalAccessToken = () => {
   const user = getUser();
-  return user?.accessToken;
+  return user?.token;
 };
 
 const getUser = () => {

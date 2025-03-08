@@ -114,7 +114,10 @@ const DashBoardLayout = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dashboard/users" className="flex items-center">
+                  <Link
+                    to="/dashboard/manage-users"
+                    className="flex items-center"
+                  >
                     <FaUser className="w-5 h-5 mr-2" /> All Users
                   </Link>
                 </li>

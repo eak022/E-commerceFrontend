@@ -13,6 +13,7 @@ import ProtectPage from "../pages/ProtectPage/index";
 import AddProduct from "../pages/AddProduct/index";
 import ManageItems from "../pages/ManageItems/index";
 import AdminRoute from "../ProtectRoutes/AdminRoute";
+import ManageUsers from "../pages/ManageUser/index";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
       {
         path: "manage-items",
         element: <ManageItems />,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers />,
       },
     ],
   },
