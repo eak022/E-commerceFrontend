@@ -4,16 +4,18 @@ import { FaGithub } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
+import UserService from "../services/user.service";
+
 
 const SocialLogin = () => {
-  const { signUpwithGoogle, signUpwithFacebook, signUpwithGitHub } =
+  const { signUpWithGoogle, signUpWithFacebook, signUpWithGitHub } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
 
   const handleGoogleSignUp = () => {
-    signUpwithGoogle()
+    signUpWithGoogle()
       .then((result) => {
         const user = result.user;
         Swal.fire({
@@ -35,7 +37,7 @@ const SocialLogin = () => {
   };
 
   const handleFacebookSignUp = () => {
-    signUpwithFacebook()
+    signUpWithFacebook()
       .then((result) => {
         const user = result.user;
         console.log("Facebook Login Result:", result);
@@ -59,7 +61,7 @@ const SocialLogin = () => {
   };
 
   const handleGithubSignUp = () => {
-    signUpwithGitHub()
+    signUpWithGitHub()
       .then((result) => {
         const user = result.user;
         Swal.fire({

@@ -8,72 +8,84 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  FacebookAuthProvider,
   GithubAuthProvider,
+  FacebookAuthProvider,
+  updateProfile,
 } from "firebase/auth";
-
-// Create the AuthContext
+// สร้าง Context
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth(app);
-
-  // Create user with email and password
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
-
-  // Log in user with email and password
   const login = (email, password) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
-
-  // Log out the user
   const logout = () => {
     return signOut(auth);
   };
 
-  // Sign up user using Google
-  const signUpwithGoogle = () => {
+  const signUpWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
-  // Sign up user using Facebook
-  const signUpwithFacebook = () => {
+  const signUpWithFacebook = () => {
     const provider = new FacebookAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
-  // Sign up user using GitHub
-  const signUpwithGitHub = () => {
+  const signUpWithGithub = () => {
     const provider = new GithubAuthProvider();
     return signInWithPopup(auth, provider);
   };
 
-  // Auth context value
+  const updateUserProfile = async (displayName, photoURL) => {
+    if (auth.currentUser) {
+      try {
+        await updateProfile(auth.currentUser, { displayName, photoURL });
+        setUser({ ...auth.currentUser, displayName, photoURL });
+      } catch (error) {
+        console.error("เกิดข้อผิดพลาดขณะอัปเดตโปรไฟล์:", error);
+        throw error;
+      }
+    } else {
+      return Promise.reject(new Error("ผู้ใช้ยังไม่ได้เข้าสู่ระบบ"));
+    }
+  };
+
   const authInfo = {
     user,
     createUser,
     login,
     logout,
-    signUpwithGoogle,
-    signUpwithFacebook,
-    signUpwithGitHub,
+    signUpWithGoogle,
+    signUpWithGithub,
+    signUpWithFacebook,
+    updateUserProfile,
+    isLoading,
   };
-
-  // Check if the user is logged in
+  //check if user is logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        setUser(currentUser);
+        setIsLoading(false);
+      }
+      setIsLoading(false);
     });
-    return () => unsubscribe();
+    return () => {
+      return unsubscribe();
+    };
   }, [auth]);
 
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
-
 export default AuthProvider;
