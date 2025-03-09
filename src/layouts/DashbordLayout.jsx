@@ -9,7 +9,7 @@ import {
   FaHeadset,
 } from "react-icons/fa";
 import { Outlet } from "react-router";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard,MdSupervisorAccount } from "react-icons/md";
 const DashboardLayout = () => {
   const isAdmin = true;
 
@@ -40,20 +40,18 @@ const DashboardLayout = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu w-80 bg-base-200 min-h-full p-4">
+          <ul className="menu w-80 min-h-full p-4 bg-gradient-to-r from-[#FAFAFA] from-0% to-[#bdbdbd] to-100%">
+
             {/* Admin Profile */}
             <div className="flex items-center pb-4 border-b">
               <Link to="/dashboard" className="flex items-center">
-                <img
-                  src="/bg.png"
-                  alt="Admin"
-                  className="w-16 h-16 rounded-full mr-4"
-                />
+                <MdSupervisorAccount className="w-16 h-16 rounded-full mr-4 text-purple-600" />
                 <span className="text-xs bg-purple-600 text-white px-2 py-1 rounded-full">
                   Admin
                 </span>
               </Link>
             </div>
+
             {/* Sidebar Menu */}
             <li>
               <Link to="/dashboard">
@@ -61,7 +59,7 @@ const DashboardLayout = () => {
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/orders">
+              <Link to="/dashboard/manage-orders">
                 <FaBox /> Manage Orders
               </Link>
             </li>
@@ -76,7 +74,7 @@ const DashboardLayout = () => {
               </Link>
             </li>
             <li>
-              <Link to="/dashboard/users">
+              <Link to="/dashboard/manage-users">
                 <FaUser /> All Users
               </Link>
             </li>

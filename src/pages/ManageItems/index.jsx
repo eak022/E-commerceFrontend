@@ -105,7 +105,7 @@ const index = () => {
         <div className="overflow-x-auto">
           <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
             <thead>
-              <tr className="bg-gray-200">
+              <tr className="bg-red text-white">
                 <th className="p-3 border">Image</th>
                 <th className="p-3 border">Name</th>
                 <th className="p-3 border">Category</th>

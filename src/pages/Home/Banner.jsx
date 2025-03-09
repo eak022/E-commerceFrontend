@@ -3,7 +3,7 @@ import ProductItem from "../../components/ProductItem";
 
 const Banner = () => {
   return (
-    <div className="section-container bg-gradient-to-r from-[#FAFAFA] from-0% to-[#bdbdbd] to-100%">
+    <div className="section-container mt-1 bg-gradient-to-r from-[#FAFAFA] from-0% to-[#bdbdbd] to-100%">
       <div className="py-12 flex flex-col md:flex-row-reverse justify-between items-center">
         <div className="md:w-1/2">
           <img src="/images/home/banner.png" alt="" />

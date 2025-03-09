@@ -6,7 +6,8 @@ import useCart from "../hooks/useCart";
 import Swal from "sweetalert2";
 
 const Card = ({ item }) => {
-  const { _id, name, image, description, category, price } = item;
+  // console.log("Item in Card Component:", item);
+  const {name, image, description, category, price } = item;
   const { user } = useContext(AuthContext);
   const [cart, refetch] = useCart();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
@@ -25,7 +26,6 @@ const Card = ({ item }) => {
 
     try {
       const cartItem = {
-        productId: _id,
         email: user.email,
         quantity: 1,
         name,
@@ -33,6 +33,8 @@ const Card = ({ item }) => {
         image,
       };
       const response = await cartService.addToCart(cartItem);
+      console.log(cartItem);
+      
       if (response.status === 200) {
         Swal.fire({
           icon: "success",

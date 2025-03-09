@@ -25,5 +25,6 @@ const OrderService = {
   getOrderById,
   deleteOrder,
   updateOrderStatus,
+  
 };
 export default OrderService;

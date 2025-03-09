@@ -27,7 +27,6 @@ const Index = () => {
         await UserService.makeUser(email);
       }
 
-      // อัปเดต UI โดยเปลี่ยน role ใน state
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user.email === email
@@ -52,52 +51,51 @@ const Index = () => {
       });
     }
   };
+
   return (
     <div className="container mx-auto p-6">
       <h2 className="text-3xl font-bold text-center mb-6">Manage Users</h2>
-
       <div className="overflow-x-auto">
-        <table className="table-auto w-full border-collapse border border-gray-300 shadow-lg">
+      <table className="table-auto w-full min-w-screen-md border border-gray-300 border-collapse shadow-md">
           <thead>
-            <tr className="bg-gray-200">
-              <th className="p-3 border">No</th>
-              <th className="p-3 border">Email</th>
-              <th className="p-3 border">Role</th>
-              <th className="p-3 border">Actions</th>
+            <tr className="bg-red text-white text-sm">
+              <th className="p-4 border text-center">#</th>
+              <th className="p-4 border text-center">Email</th>
+              <th className="p-4 border text-center">Role</th>
+              <th className="p-4 border text-center">Action</th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan="4" className="text-center p-3">
+                <td colSpan="4" className="text-center p-4">
                   No users found
                 </td>
               </tr>
             ) : (
               users.map((user, index) => (
-                <tr key={user._id} className="text-center">
-                  <td>{index + 1}</td>
-                  <td className="p-3 border">{user.email}</td>
-                  <td className="p-3 border flex items-center justify-center">
-                    <label className="flex items-center cursor-pointer">
-                      <span className="flex items-center mr-2">
-                        <FaUsers className="mr-3" />
+                <tr key={user._id} className="text-sm text-center border-b">
+                  <td className="p-4">{index + 1}</td>
+                  <td className="p-4 border">{user.email}</td>
+                  <td className="p-4 border">
+                    <label className="flex items-center justify-center cursor-pointer">
+                      <span className="mr-2 font-semibold">
                         {user.role === "admin" ? "Admin" : "User"}
                       </span>
                       <input
                         type="checkbox"
-                        className="toggle"
+                        className="toggle toggle-success"
                         checked={user.role === "admin"}
                         onChange={() => handleToggleRole(user.email, user.role)}
                       />
                     </label>
                   </td>
-                  <td className="p-3 border">
+                  <td className="p-4 border">
                     <button
-                      className="bg-red text-white px-3 py-1 rounded"
+                      className="bg-orange-500 text-white px-3 py-1 rounded-full hover:bg-orange-600"
                       onClick={() => handleDelete(user._id)}
                     >
-                      Delete
+                      &#x1F5D1;
                     </button>
                   </td>
                 </tr>
@@ -105,6 +103,15 @@ const Index = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center items-center mt-4">
+          <button className="bg-gray-400 text-white px-3 py-1 mr-4 rounded disabled:opacity-50 ">
+            Prev
+          </button>
+          <span>Page 1 of 2</span>
+          <button className="bg-red text-white px-3 py-1 ml-4 rounded hover:bg-red-900">
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
