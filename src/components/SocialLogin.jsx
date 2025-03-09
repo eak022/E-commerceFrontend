@@ -6,21 +6,22 @@ import Swal from "sweetalert2";
 import { useNavigate, useLocation } from "react-router";
 import UserService from "../services/user.service";
 
-
 const SocialLogin = () => {
-  const { signUpWithGoogle, signUpWithFacebook, signUpWithGitHub } =
+  const { signUpWithGoogle, signUpWithGithub, signUpWithFacebook } =
     useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location?.state?.from?.pathname || "/";
-
-  const handleGoogleSignUp = () => {
+  const googleSignUp = () => {
     signUpWithGoogle()
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
+        console.log(user);
+        //Sign up to loacl backend
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
-          title: "Google Sign Up Successful",
+          title: "Google Sign Up Successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -28,22 +29,41 @@ const SocialLogin = () => {
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Google Sign Up Failed",
-          text: error.message,
-        });
+        console.log(error);
       });
   };
-
-  const handleFacebookSignUp = () => {
+  const githubSignUp = () => {
+    let user;
+    signUpWithGithub()
+      .then(async (result) => {
+        user = result.user;
+        console.log(user);
+        //Sign up to loacl backend
+        await UserService.addUser(user.email);
+        Swal.fire({
+          icon: "success",
+          title: "GitHub Sign Up Successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        document.getElementById("login").close();
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const facebookSignUp = () => {
+    let user;
     signUpWithFacebook()
-      .then((result) => {
-        const user = result.user;
-        console.log("Facebook Login Result:", result);
+      .then(async (result) => {
+        user = result.user;
+        console.log(user);
+        //Sign up to loacl backend
+        await UserService.addUser(user.email);
         Swal.fire({
           icon: "success",
-          title: "Facebook Sign Up Successful",
+          title: "Facebook Sign Up Successfully",
           showConfirmButton: false,
           timer: 1500,
         });
@@ -51,56 +71,19 @@ const SocialLogin = () => {
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        console.error("Facebook Login Error:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Facebook Sign Up Failed",
-          text: error.message,
-        });
+        console.log(error);
       });
   };
-
-  const handleGithubSignUp = () => {
-    signUpWithGitHub()
-      .then((result) => {
-        const user = result.user;
-        Swal.fire({
-          icon: "success",
-          title: "GitHub Sign Up Successful",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        document.getElementById("login").close();
-        navigate(from, { replace: true });
-      })
-      .catch((error) => {
-        Swal.fire({
-          icon: "error",
-          title: "GitHub Sign Up Failed",
-          text: error.message,
-        });
-      });
-  };
-
   return (
     <div className="text-center space-x-3 mb-5">
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red hover:text-white"
-        onClick={handleGoogleSignUp}
-      >
-        <FaGoogle className="w-6 h-6" />
+      <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
+        <FaGoogle className="w-6 h-6" onClick={googleSignUp} />
       </button>
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red hover:text-white"
-        onClick={handleGithubSignUp}
-      >
-        <FaGithub className="w-6 h-6" />
+      <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
+        <FaGithub className="w-6 h-6" onClick={githubSignUp} />
       </button>
-      <button
-        className="btn btn-ghost btn-circle hover:bg-red hover:text-white"
-        onClick={handleFacebookSignUp}
-      >
-        <FaFacebook className="w-6 h-6" />
+      <button className="btn btn-ghost btn-circle hover:bg-red hover:text-white">
+        <FaFacebook className="w-6 h-6" onClick={facebookSignUp} />
       </button>
     </div>
   );

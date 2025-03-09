@@ -1,8 +1,8 @@
 import api from "./api";
 const API_URL = "/user";
 const signJwt = async (email) => {
-  return await api.post(`${API_URL}/sign`, { email });
-};
+    return await api.post(`${API_URL}/sign`, { email }); // เปลี่ยนเป็น "/user/sign"
+  };
 const addUser = async (email) => {
   return await api.post(`${API_URL}/`, { email });
 };

@@ -1,16 +1,18 @@
-import React from "react";
+import Profile from "./Profile";
 import { AuthContext } from "../context/AuthContext";
 import { useContext } from "react";
-import Profile from "./Profile";
-import UserIcon from "./icons/UserIcon";
+// import UserIcon from "./icons/UserIcon";
 import Modal from "./Modal";
+import useCart from "../hooks/useCart";
+import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
+  const [cart, refetch] = useCart();
   const navItems = (
     <>
       <li>
-        <a href="Home">Home</a>
+        <a href="/">Home</a>
       </li>
       <li tabIndex={0}>
         <details>
@@ -23,10 +25,10 @@ const Navbar = () => {
               <a href="/shop?category=clothing">Clothing</a>
             </li>
             <li>
-              <a href="/shop?category=accessories">Accessories</a>
+              <a href="/shop?category=accessoires">Accessoires</a>
             </li>
             <li>
-              <a href="/shop?category=gadget">Gadgets</a>
+              <a href="/shop?category=gadgets">Gadgets</a>
             </li>
             <li>
               <a href="/shop?category=swag">Swag</a>
@@ -36,22 +38,19 @@ const Navbar = () => {
       </li>
       <li tabIndex={0}>
         <details>
-          <summary>Service</summary>
+          <summary>Services</summary>
           <ul>
             <li>
-              <a href="Order">Order</a>
+              <a href="">Order online</a>
             </li>
             <li>
-              <a href="Order Tracking">Order Tracking</a>
+              <a href="">Order Tracking</a>
             </li>
           </ul>
         </details>
       </li>
       <li>
-        <a href="/">Promotions</a>
-      </li>
-      <li>
-        <a href="/">About Us</a>
+        <a href="">Promotions</a>
       </li>
     </>
   );
@@ -82,12 +81,8 @@ const Navbar = () => {
             {navItems}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl" href="/">
-          <img
-            src="/logo.png"
-            alt="Logo"
-            className="h-6 lg:h-12 pr-1 mx-auto"
-          />{" "}
+        <a className="btn btn-ghost text-xl flex items-center">
+          <img src="/bg.png" alt="" className="mr-2 h-8" />
           SE Souvenir Shop
         </a>
       </div>
@@ -95,15 +90,17 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{navItems}</ul>
       </div>
       <div className="navbar-end">
+        {/* Ternary operator */}
         {user ? (
-          <Profile />
+          <>
+            <Profile />
+          </>
         ) : (
           <button
             className="btn bg-red text-white rounded-full px-5 flex items-center gap-2"
             onClick={() => document.getElementById("login").showModal()}
           >
-            <UserIcon className="w-6 h-6" />
-            Login
+            <FaUserCircle className="w-6 h-6" /> Login
           </button>
         )}
       </div>
