@@ -6,10 +6,12 @@ const AdminRoute = ({ children }) => {
   const { user, isLoading, getUser } = useContext(AuthContext);
   const location = useLocation();
   const userInfo = getUser();
-  if (isLoading) {
-    return <div>loading.....</div>;
+console.log(user);
+
+  if (isLoading || !user) {
+    return <div>Loading.....</div>;
   }
-  if (user && userInfo.role === "admin") {
+  if (userInfo.userInfo.role === "admin") {
     return children;
   }
   return <Navigate to="/signin" state={{ from: location }} replace />;

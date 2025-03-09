@@ -23,11 +23,6 @@ const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const auth = getAuth(app);
 
-  const getUser = () => {
-    const userInfo = cookies.get("user") || null;
-    return userInfo;
-  };
-
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
   };
@@ -61,6 +56,11 @@ const AuthProvider = ({ children }) => {
       displayName: name,
       photoURL: photoURL,
     });
+  };
+
+  const getUser = () => {
+    const userInfo = cookies.get("user") || null;
+    return userInfo;
   };
 
   useEffect(() => {
